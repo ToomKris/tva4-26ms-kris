@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rõõmunurk – Kris Toom</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --pink: #ff69a6;
+      --dark-pink: #e84387;
+      --text: #58354b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', system-ui, sans-serif;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 3rem 1.2rem;
+      min-height: 100vh;
+      line-height: 1.7;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, #ffd6e8 0, transparent 35%),
+        radial-gradient(circle at 90% 80%, #eadcff 0, transparent 35%),
+        linear-gradient(135deg, #fff5fa, #ffe4f0, #f5eaff);
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+
+    .container {
+      position: relative;
+      padding: clamp(1.5rem, 5vw, 3rem);
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      box-shadow: 0 20px 60px rgba(207, 87, 145, 0.16);
+      backdrop-filter: blur(14px);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 7px;
+      background: linear-gradient(90deg, #ff82b2, #d8a7ff, #ffb6d5);
+    }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 1rem;
+      color: var(--dark-pink);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .back:hover { text-decoration: underline; }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(2rem, 6vw, 3rem);
+      line-height: 1.2;
+      letter-spacing: -1px;
+      background: linear-gradient(100deg, #e84387, #ff85b5, #a66ee8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .intro { color: #89677d; margin-bottom: 1.5rem; }
+
+    .gif {
+      width: min(260px, 70vw);
+      height: auto;
+      border-radius: 28px;
+      box-shadow: 0 10px 30px #e8a8ca55;
+    }
+
+    .joy-button {
+      display: inline-block;
+      margin: 2rem 0 1rem;
+      padding: 1rem 2.2rem;
+      font: 700 1.15rem 'Poppins', system-ui, sans-serif;
+      color: #fff;
+      background: linear-gradient(135deg, #ff69a6, #b794f4);
+      border: 0;
+      border-radius: 999px;
+      box-shadow: 0 8px 24px #e8438766;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .joy-button:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 30px #e8438788; }
+    .joy-button:active { transform: scale(0.96); }
+
+    .message {
+      min-height: 3.5rem;
+      margin: 0.5rem auto 0;
+      max-width: 30rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #b43c78;
+    }
+    .message.pop { animation: pop 0.4s ease-out; }
+    @keyframes pop {
+      from { transform: scale(0.6); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .counter { color: #a58298; font-size: 0.9rem; }
+
+    .confetti {
+      position: fixed;
+      top: -2rem;
+      font-size: 1.6rem;
+      pointer-events: none;
+      animation: fall linear forwards;
+      z-index: 10;
+    }
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(540deg); opacity: 0.6; }
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid #f3d4e5;
+      color: #a58298;
+      font-size: 0.82rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <a class="back" href="./">← Tagasi avalehele</a>
+
+    <h1>Rõõmunurk 💖</h1>
+    <p class="intro">Kui päev tundub hall, siis see nupp aitab. Garanteeritud!*</p>
+
+    <img class="gif" src="pildid/roomus-suda.gif" alt="Rõõmus roosa süda hüppab ja säravad tähed vilguvad ümber">
+
+    <div>
+      <button class="joy-button" id="joy" type="button">Vajuta siia, et rõõmustada! ✨</button>
+    </div>
+
+    <p class="message" id="message" aria-live="polite"></p>
+    <p class="counter" id="counter"></p>
+
+    <footer>* Garantii kehtib ainult naeratuse korral 😉 · K-TVA4-26MS</footer>
+  </main>
+
+  <script>
+    const messages = [
+      'Sa oled täna täiesti super! 🌟',
+      'Kõik sinu commit\'id lähevad roheliseks! ✅',
+      'Sinu leht on internetis live, see on päris äge! 🚀',
+      'Saadan sulle virtuaalse kalli 🤗',
+      'Kohv maitseb täna eriti hästi ☕',
+      'Isegi 404 ei suuda sind peatada! 💪',
+      'Sa õpid iga päevaga juurde, oled tubli! 📚',
+      'Päike paistab, kuigi see on pilve taga 🌤️',
+      'Sinu naeratus teeb maailma ilusamaks 😊',
+      'Push õnnestus! Ja sina samuti! 💗'
+    ];
+    const emojis = ['💖', '✨', '🌸', '💗', '🎀', '⭐', '🦄', '🌈'];
+
+    const button = document.getElementById('joy');
+    const message = document.getElementById('message');
+    const counter = document.getElementById('counter');
+    let clicks = 0;
+    let last = -1;
+
+    function confetti() {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) return;
+      for (let i = 0; i < 30; i++) {
+        const el = document.createElement('span');
+        el.className = 'confetti';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.animationDuration = 2 + Math.random() * 2 + 's';
+        el.style.animationDelay = Math.random() * 0.5 + 's';
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      }
+    }
+
+    button.addEventListener('click', () => {
+      let i;
+      do { i = Math.floor(Math.random() * messages.length); } while (i === last);
+      last = i;
+
+      message.textContent = messages[i];
+      message.classList.remove('pop');
+      void message.offsetWidth; // käivitab animatsiooni uuesti
+      message.classList.add('pop');
+
+      clicks++;
+      counter.textContent = 'Rõõmustatud ' + clicks + ' korda 💕';
+      confetti();
+    });
+  </script>
+</body>
+</html>
